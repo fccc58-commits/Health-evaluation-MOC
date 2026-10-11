@@ -88,7 +88,7 @@
                 <div id="interventionsContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
-            <button type="submit" class="btn">حفظ وإرسال البيانات إلى قوقل شيت</button>
+            <button type="submit" class="btn">حفظ وإرسال البيانات</button>
         </form>
     </div>
 
@@ -218,7 +218,7 @@
 
         const submitBtn = document.querySelector('button[type="submit"]');
         try {
-            submitBtn.textContent = "جاري الحفظ في القوقل شيت...";
+            submitBtn.textContent = "جاري الحفظ ...";
             submitBtn.disabled = true;
 
             await fetch(WEB_APP_URL, {
@@ -228,7 +228,7 @@
                 body: JSON.stringify(record)
             });
 
-            alert('تم حفظ البيانات في Google Sheets بنجاح!');
+            alert('تم حفظ البيانات  بنجاح!');
             document.getElementById('healthForm').reset();
             document.getElementById('centerSelect').disabled = true;
             document.getElementById('systemsContainer').style.display = 'none';
@@ -238,7 +238,7 @@
             console.error("خطأ:", e);
             alert('حدث خطأ أثناء الإرسال.');
         } finally {
-            submitBtn.textContent = 'حفظ وإرسال البيانات إلى قوقل شيت';
+            submitBtn.textContent = 'حفظ وإرسال البيانات ';
             submitBtn.disabled = false;
         }
     };
