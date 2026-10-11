@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - مسؤول النظام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00838f;
+            --primary-dark: #006064;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .login-card, .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .login-card {
+            max-width: 400px;
+            margin: 80px auto;
+            text-align: center;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            width: 100%;
+        }
+        .btn-export {
+            background-color: #27ae60;
+            margin-top: 15px;
+        }
+        .btn-danger {
+            background-color: #c0392b;
+            font-size: 13px;
+            padding: 5px 10px;
+            width: auto;
+        }
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #e0f2f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-box h4 { margin: 0; color: var(--primary-dark); font-size: 14px; }
+        .stat-box span { font-size: 24px; font-weight: bold; color: var(--primary); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+        th { background-color: #f1f5f9; }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- شاشة تسجيل الدخول للمسؤول -->
+    <div id="loginView" class="login-card">
+        <h3>تسجيل دخول المسؤول</h3>
+        <p style="font-size: 13px; color: #666;">أدخل كلمة المرور للوصول لتصدير البيانات والإحصائيات</p>
+        <input type="password" id="passInput" placeholder="كلمة المرور">
+        <button class="btn" onclick="checkAuth()">دخول</button>
+        <a href="index.html" class="nav-back" style="margin-top: 15px;">الرجوع لصفحة الإدخال</a>
+    </div>
+
+    <!-- شاشة الإدارة (تظهر بعد كلمة المرور الصحيحة) -->
+    <div id="adminDashboard" style="display: none;">
+        <a href="index.html" class="nav-back">← العودة لصفحة الإدخال الرئيسية</a>
+        <div class="card">
+            <div class="header-flex">
+                <h2 style="margin:0; color: var(--primary-dark);">لوحة تحكم المسؤول (Admin)</h2>
+                <button type="button" class="btn btn-danger" onclick="clearAllData()">حذف كافة البيانات</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h4>إجمالي السجلات</h4>
+                    <span id="totalRecords">0</span>
+                </div>
+                <div class="stat-box">
+                    <h4>إجمالي الأنظمة</h4>
+                    <span id="totalSystems">0</span>
+                </div>
+                <div class="stat-box">
+                    <h4>إجمالي المسارات والتدخلات</h4>
+                    <span id="totalPathInt">0</span>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>القطاع</th>
+                            <th>المركز الصحي</th>
+                            <th>الأنظمة</th>
+                            <th>المسارات ومنسقيها</th>
+                            <th>التدخلات ومنسقيها</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <button type="button" class="btn btn-export" onclick="exportToCSV()">سحب وتصدير البيانات (Excel / CSV)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // كلمة المرور الافتراضية للمسؤول هي: 123456
+    const ADMIN_PASS = "123456";
+    let submittedData = JSON.parse(localStorage.getItem('healthData')) || [];
+
+    function checkAuth() {
+        const input = document.getElementById('passInput').value;
+        if (input === ADMIN_PASS) {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            updateDashboard();
+        } else {
+            alert('كلمة المرور غير صحيحة!');
+        }
+    }
+
+    function updateDashboard() {
+        document.getElementById('totalRecords').textContent = submittedData.length;
+        
+        let totalSys = submittedData.reduce((sum, item) => sum + item.systems.length, 0);
+        let totalPathInt = submittedData.reduce((sum, item) => sum + item.pathways.length + item.interventions.length, 0);
+        
+        document.getElementById('totalSystems').textContent = totalSys;
+        document.getElementById('totalPathInt').textContent = totalPathInt;
+
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+
+        if (submittedData.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td></tr>`;
+            return;
+        }
+
+        submittedData.forEach(item => {
+            let sysText = item.systems.length > 0 ? item.systems.join('، ') : '-';
+            let pathText = item.pathways.length > 0 ? item.pathways.map(p => `${p.name} (المنسق: ${p.coord})`).join(' | ') : '-';
+            let interText = item.interventions.length > 0 ? item.interventions.map(int => `${int.name} (المنسق: ${int.coord})`).join(' | ') : '-';
+
+            let row = `<tr>
+                <td>${item.sector}</td>
+                <td>${item.center}</td>
+                <td>${sysText}</td>
+                <td>${pathText}</td>
+                <td>${interText}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    function clearAllData() {
+        if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات المُسجلة؟')) {
+            submittedData = [];
+            localStorage.removeItem('healthData');
+            updateDashboard();
+            alert('تم مسح كافة البيانات.');
+        }
+    }
+
+    function exportToCSV() {
+        if (submittedData.length === 0) {
+            alert('لا توجد بيانات لتصديرها حالياً.');
+            return;
+        }
+
+        let csvContent = "\uFEFFالقطاع,المركز الصحي,الأنظمة,المسارات ومنسقيها,التدخلات ومنسقيها,تاريخ الإدخال\n";
+        submittedData.forEach(item => {
+            let sys = item.systems.join(' - ');
+            let paths = item.pathways.map(p => `${p.name} [منسق: ${p.coord}]`).join(' - ');
+            let inters = item.interventions.map(i => `${i.name} [منسق: ${i.coord}]`).join(' - ');
+            let date = item.date || '-';
+
+            csvContent += `"${item.sector}","${item.center}","${sys}","${paths}","${inters}","${date}"\n`;
+        });
+
+        let encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "health_evaluation_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>

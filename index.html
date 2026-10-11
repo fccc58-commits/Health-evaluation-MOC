@@ -51,9 +51,6 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         .form-grid {
             display: grid;
@@ -126,59 +123,18 @@
         .btn:hover {
             background-color: var(--primary-dark);
         }
-        .btn-export {
-            background-color: #27ae60;
-            margin-top: 15px;
-        }
-        .btn-export:hover {
-            background-color: #219653;
-        }
-        .btn-danger {
-            background-color: #c0392b;
-            font-size: 13px;
-            padding: 5px 10px;
-            width: auto;
-            margin: 0;
-        }
-        .btn-danger:hover {
-            background-color: #a93226;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-box {
-            background: #e0f2f1;
-            padding: 15px;
-            border-radius: 8px;
+        .admin-link {
             text-align: center;
-        }
-        .stat-box h4 {
-            margin: 0;
-            color: var(--primary-dark);
-            font-size: 14px;
-        }
-        .stat-box span {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
             margin-top: 15px;
         }
-        th, td {
-            padding: 10px;
-            text-align: right;
-            border-bottom: 1px solid var(--border-color);
+        .admin-link a {
+            color: #777;
+            text-decoration: none;
             font-size: 13px;
         }
-        th {
-            background-color: #f1f5f9;
-            color: #333;
+        .admin-link a:hover {
+            color: var(--primary);
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -187,9 +143,10 @@
 <div class="container">
     <header>
         <h1>نظام إدارة وتقييم البيانات الصحية</h1>
-        <p>لوحة تفاعلية لإدخال ومتابعة القطاعات، المراكز، الأنظمة، والمسارات والتدخلات</p>
+        <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
+    <!-- نموذج الإدخال -->
     <div class="card">
         <h3>إدخال تقييم جديد</h3>
         <form id="healthForm" onsubmit="saveData(event)">
@@ -209,75 +166,37 @@
                 </div>
             </div>
 
+            <!-- 1. الأنظمة المطبقة -->
             <div class="form-group">
                 <label for="systemsCount">عدد الأنظمة المطبقة:</label>
                 <input type="number" id="systemsCount" min="0" value="0" oninput="renderDynamicInputs('systems')">
                 <div id="systemsContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
+            <!-- 2. المسارات المطبقة -->
             <div class="form-group">
                 <label for="pathwaysCount">عدد المسارات المطبقة:</label>
                 <input type="number" id="pathwaysCount" min="0" value="0" oninput="renderDynamicInputs('pathways')">
                 <div id="pathwaysContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
+            <!-- 3. التدخلات المطبقة -->
             <div class="form-group">
                 <label for="interventionsCount">عدد التدخلات المطبقة:</label>
                 <input type="number" id="interventionsCount" min="0" value="0" oninput="renderDynamicInputs('interventions')">
                 <div id="interventionsContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
-            <button type="submit" class="btn">حفظ وإضافة البيانات</button>
+            <button type="submit" class="btn">حفظ وإرسال البيانات</button>
         </form>
     </div>
 
-    <div class="card">
-        <h3>
-            <span>لوحة الإحصائيات والبيانات المُسجلة</span>
-            <button type="button" class="btn btn-danger" onclick="clearAllData()">حذف كافة البيانات</button>
-        </h3>
-
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h4>إجمالي السجلات</h4>
-                <span id="totalRecords">0</span>
-            </div>
-            <div class="stat-box">
-                <h4>إجمالي الأنظمة</h4>
-                <span id="totalSystems">0</span>
-            </div>
-            <div class="stat-box">
-                <h4>إجمالي المسارات والتدخلات</h4>
-                <span id="totalPathInt">0</span>
-            </div>
-        </div>
-
-        <div style="overflow-x: auto;">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>القطاع</th>
-                        <th>المركز الصحي</th>
-                        <th>الأنظمة (الأسماء)</th>
-                        <th>المسارات (الأسماء والمنسقين)</th>
-                        <th>التدخلات (الأسماء والمنسقين)</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <button type="button" class="btn btn-export" onclick="exportToCSV()">سحب وتصدير البيانات (CSV)</button>
+    <div class="admin-link">
+        <a href="admin.html">دخول مسؤول النظام (Admin)</a>
     </div>
 </div>
 
 <script>
-    const STORAGE_KEY = 'healthData';
-
     const sectorData = {
         "الأمواه": ["مركز صحي ثجر سويدان", "مركز صحي العماير", "مركز صحي الامواه"],
         "البرك": ["مركز الرعاية الصحية الأولية بالبرك", "مركز الرعاية الصحية الأولية الفيض", "مركز الرعاية الصحية الأولية بالسعيدة الصوالحه", "مركز الرعاية الصحية الأولية بذهبان", "مركز الرعاية الصحية الأولية ذراء", "مركز الرعاية الصحية الأولية براكه", "مركز الرعاية الصحية الأولية بعمق"],
@@ -299,7 +218,7 @@
         "بللسمر": ["مركز صحي سدوان", "مركز الرعاية الصحية الأولية بخارف", "مركز الرعاية الصحية الاولية حوراء", "مركز صحي ببللسمر"],
         "تثليث": ["مركز صحي ربة", "مركز صحي تثليث", "مركز صحي القيرة", "مركز صحي الحمضة", "مركز صحي الزرق", "مركز صحي يهرا", "مركز صحي جاش", "مركز صحي غرب تثليث"],
         "تنومه": ["مركز صحي سبت تنومة", "مركز صحي ترج", "مركز صحي سهل تنومة", "مركز صحي منصبة"],
-        "خميس مشيط": ["مركز الرعاية الصحية الاولية بأم سرار", "كود صفية", "مركز صحي الحي الجديد", "مركز الرعاية الصحية الاولية بتندحة الزلال", "مركز صحي عتود العمائر", "مركز الرعاية الصحية الأولية المخطط 1", "مركز الرعاية الصحية الاولية بابن سيناء", "مركز الرعاية الصحية الاولية بشباعة", "مركز الرعاية الصحية الاولية بالهميلة", "مركز الرعاية الصحية الاولية بحي الضباط", "مركز الرعاية الصحية الأولية بالشرفية", "مركز الرعاية الصحية الأولية بشمال المطار", "مركز صحي الحفاير", "مركز الرعاية الصحية الأولية بغرب خميس مشيط", "مركز الرعاية الصحية الاولية بصناعية", "مركز الرعاية الصحية الاولية التنمية الاجتماعية", "مركز الرعاية الصحية الاولية بالهرير و ذلاله", "مركز الرعاية الصحية العمارة", "مركز الرعاية الصحية الأولية بشرق خميس مشيط", "مركز الرعاية الصحية الاولية بالرصراص"],
+        "خميس مشيط": ["مركز الرعاية الصحية الاولية بأم سرار", "كود صفية", "مركز صحي الحي الجديد", "مركز الرعاية الصحية الاولية بتندحة الزلال", "مركز صحي عتود العمائر", "مركز الرعاية الصحية الأولية المخطط 1", "مركز الرعاية الصحية الاولية بابن سيناء", "مركز الرعاية الصحية الاولية بشباعة", "مركز الرعاية الصحية الاولية بالهميلة", "مركز الرعاية الصحية الأولية بحي الضباط", "مركز الرعاية الصحية الأولية بالشرفية", "مركز الرعاية الصحية الأولية بشمال المطار", "مركز صحي الحفاير", "مركز الرعاية الصحية الأولية بغرب خميس مشيط", "مركز الرعاية الصحية الاولية بصناعية", "مركز الرعاية الصحية الاولية التنمية الاجتماعية", "مركز الرعاية الصحية الاولية بالهرير و ذلاله", "مركز الرعاية الصحية العمارة", "مركز الرعاية الصحية الأولية بشرق خميس مشيط", "مركز الرعاية الصحية الاولية بالرصراص"],
         "رجال ألمع": ["مركز الرعاية الصحية الأولية المجمعة والعقل", "مركز الرعاية الصحية الأولية بالجرف", "مركز الرعاية الصحية الاولية بصلب", "مركز الرعاية الصحية الأولية بغمره", "مركز الرعاية الصحية الأولية بوسانب", "مركز الرعاية الصحية الأولية بالنجدين", "مركز الرعاية الصحية الأولية بثلوث حسوة", "مركز الرعاية الصحية الأولية بالبتيلة", "مركز الرعاية الصحية الأولية بالشعبين", "مركز الرعاية الصحية الأولية بالأهمال", "مركز الرعاية الصحية الاولية ببني جونة", "مركز الرعاية الصحية الاولية بحورة قيس", "مركز الرعاية الصحية الأولية بالحبيل", "مركز الرعاية الصحية الأولية بثلوث ريم", "مركز الرعاية الصحية الأولية بروام"],
         "سراة عبيدة": ["مركز صحي سراة عبيدة", "مركز صحي سبت بني بشر", "مركز صحي العرضين", "مركز صحي العرقين", "مركز صحي عين اللوي", "مركز صحي الوهابة", "مركز صحي الجوة", "مركز صحي ال خلف", "مركز صحي العسران", "مركز صحي جوف ال معمر"],
         "ظهران الجنوب": ["القطاع الصحي بظهران الجنوب- مركز صحي كتام", "القطاع الحصي بظهران الجنوب- مركز الغيل", "مركز الرعاية الاولية الصحية بالطلحة", "الفطاع الصحي بظهران الجنوب -مركز الحاجر", "القطاع الصحي بظهران الجنوب- مركز صحي ظهران", "القطاع الصحي بظهران الجنوب - الرحيب الغربي"],
@@ -307,21 +226,6 @@
         "وادي بن هشبل": ["مركز صحى وادى بن هشبل", "مركز الرعاية الصحية الاولية ببريم السليل", "مركز الرعاية الصحية الاولية بالشيق", "مركز الرعاية الصحية بخيبر الجنوب", "مركز الرعاية الصحية بشفان", "مركز الرعايه الصحيه الاوليه بالحيمه", "مركز صحي البطنه", "مركز صحي شمال خيبر الجنوب", "مركز الرعاية الصحية الاولية بيعرى"],
         "وادي ترج": ["مركز صحي البهيم", "مركز صحي المحاله", "مركز صحي الغفرات", "مركز صحي مهر", "مركز الرعاية الصحية الأولية بالقوباء", "مركز صحي حوران"]
     };
-
-    function loadStoredData() {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (!stored) return [];
-            const parsed = JSON.parse(stored);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-            console.warn('تعذر قراءة البيانات المحفوظة:', error);
-            localStorage.removeItem(STORAGE_KEY);
-            return [];
-        }
-    }
-
-    let submittedData = loadStoredData();
 
     window.onload = function() {
         const sectorSelect = document.getElementById('sectorSelect');
@@ -331,7 +235,6 @@
             opt.textContent = sector;
             sectorSelect.appendChild(opt);
         });
-        updateDashboard();
     };
 
     function updateCenters() {
@@ -355,18 +258,18 @@
     }
 
     function renderDynamicInputs(type) {
-        const countId = `${type}Count`;
-        const containerId = `${type}Container`;
-        const count = parseInt(document.getElementById(countId).value) || 0;
-        const container = document.getElementById(containerId);
+        let countId = type + 'Count';
+        let containerId = type + 'Container';
+        let count = parseInt(document.getElementById(countId).value) || 0;
+        let container = document.getElementById(containerId);
         container.innerHTML = '';
 
         if (count > 0) {
             container.style.display = 'block';
             for (let i = 1; i <= count; i++) {
-                const div = document.createElement('div');
+                let div = document.createElement('div');
                 div.className = 'dynamic-item';
-
+                
                 if (type === 'systems') {
                     div.innerHTML = `
                         <label>اسم النظام (${i}):</label>
@@ -406,134 +309,55 @@
         }
     }
 
-    function collectSystems() {
-        const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
-        const systems = [];
-
-        for (let i = 1; i <= systemsCount; i++) {
-            const value = document.getElementById(`system_${i}`)?.value.trim();
-            if (value) systems.push(value);
-        }
-
-        return systems;
-    }
-
-    function collectNamedEntries(prefix, nameKey, coordKey, itemLabel) {
-        const count = parseInt(document.getElementById(`${prefix}Count`).value) || 0;
-        const entries = [];
-
-        for (let i = 1; i <= count; i++) {
-            const name = document.getElementById(`${nameKey}${i}`)?.value.trim();
-            const coord = document.getElementById(`${coordKey}${i}`)?.value.trim();
-
-            if (name || coord) {
-                if (!name || !coord) {
-                    throw new Error(`يرجى تعبئة اسم ${itemLabel} ومنسقه في السطر ${i}.`);
-                }
-                entries.push({ name, coord });
-            }
-        }
-
-        return entries;
-    }
-
     function saveData(event) {
         event.preventDefault();
-
-        const sector = document.getElementById('sectorSelect').value.trim();
-        const center = document.getElementById('centerSelect').value.trim();
-
-        if (!sector || !center) {
-            alert('يرجى اختيار القطاع والمركز الصحي أولاً.');
-            return;
+        
+        const sector = document.getElementById('sectorSelect').value;
+        const center = document.getElementById('centerSelect').value;
+        
+        const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
+        let systems = [];
+        for (let i = 1; i <= systemsCount; i++) {
+            let val = document.getElementById(`system_${i}`)?.value;
+            if (val) systems.push(val);
         }
 
-        try {
-            const systems = collectSystems();
-            const pathways = collectNamedEntries('pathways', 'pathway_name_', 'pathway_coord_', 'المسار');
-            const interventions = collectNamedEntries('interventions', 'inter_name_', 'inter_coord_', 'التدخل');
-
-            const record = { sector, center, systems, pathways, interventions };
-            submittedData.push(record);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(submittedData));
-            updateDashboard();
-
-            document.getElementById('healthForm').reset();
-            document.getElementById('centerSelect').disabled = true;
-            document.getElementById('systemsContainer').style.display = 'none';
-            document.getElementById('pathwaysContainer').style.display = 'none';
-            document.getElementById('interventionsContainer').style.display = 'none';
-
-            alert('تم حفظ البيانات بنجاح في النظام!');
-        } catch (error) {
-            alert(error.message || 'حدث خطأ أثناء حفظ البيانات.');
-        }
-    }
-
-    function updateDashboard() {
-        document.getElementById('totalRecords').textContent = submittedData.length;
-
-        const totalSys = submittedData.reduce((sum, item) => sum + (Array.isArray(item.systems) ? item.systems.length : 0), 0);
-        const totalPathInt = submittedData.reduce((sum, item) => sum + (Array.isArray(item.pathways) ? item.pathways.length : 0) + (Array.isArray(item.interventions) ? item.interventions.length : 0), 0);
-
-        document.getElementById('totalSystems').textContent = totalSys;
-        document.getElementById('totalPathInt').textContent = totalPathInt;
-
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '';
-
-        if (submittedData.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td></tr>';
-            return;
+        const pathwaysCount = parseInt(document.getElementById('pathwaysCount').value) || 0;
+        let pathways = [];
+        for (let i = 1; i <= pathwaysCount; i++) {
+            let name = document.getElementById(`pathway_name_${i}`)?.value;
+            let coord = document.getElementById(`pathway_coord_${i}`)?.value;
+            if (name || coord) pathways.push({ name, coord });
         }
 
-        submittedData.forEach(item => {
-            const sysText = Array.isArray(item.systems) && item.systems.length > 0 ? item.systems.join('، ') : '-';
-            const pathText = Array.isArray(item.pathways) && item.pathways.length > 0 ? item.pathways.map(p => `${p.name} (المنسق: ${p.coord})`).join(' | ') : '-';
-            const interText = Array.isArray(item.interventions) && item.interventions.length > 0 ? item.interventions.map(int => `${int.name} (المنسق: ${int.coord})`).join(' | ') : '-';
-
-            const row = `<tr>
-                <td>${item.sector || '-'}</td>
-                <td>${item.center || '-'}</td>
-                <td>${sysText}</td>
-                <td>${pathText}</td>
-                <td>${interText}</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
-    }
-
-    function clearAllData() {
-        if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات المُسجلة؟')) {
-            submittedData = [];
-            localStorage.removeItem(STORAGE_KEY);
-            updateDashboard();
-            alert('تم مسح كافة البيانات.');
-        }
-    }
-
-    function exportToCSV() {
-        if (submittedData.length === 0) {
-            alert('لا توجد بيانات لتصديرها حالياً.');
-            return;
+        const interventionsCount = parseInt(document.getElementById('interventionsCount').value) || 0;
+        let interventions = [];
+        for (let i = 1; i <= interventionsCount; i++) {
+            let name = document.getElementById(`inter_name_${i}`)?.value;
+            let coord = document.getElementById(`inter_coord_${i}`)?.value;
+            if (name || coord) interventions.push({ name, coord });
         }
 
-        let csvContent = '\uFEFFالقطاع,المركز الصحي,الأنظمة,المسارات ومنسقيها,التدخلات ومنسقيها\n';
-        submittedData.forEach(item => {
-            const sys = Array.isArray(item.systems) ? item.systems.join(' - ') : '';
-            const paths = Array.isArray(item.pathways) ? item.pathways.map(p => `${p.name} [منسق: ${p.coord}]`).join(' - ') : '';
-            const inters = Array.isArray(item.interventions) ? item.interventions.map(i => `${i.name} [منسق: ${i.coord}]`).join(' - ') : '';
+        const record = {
+            sector,
+            center,
+            systems,
+            pathways,
+            interventions,
+            date: new Date().toLocaleString('ar-SA')
+        };
 
-            csvContent += `"${item.sector || ''}","${item.center || ''}","${sys}","${paths}","${inters}"\n`;
-        });
-
-        const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'health_evaluation_data.csv');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        let submittedData = JSON.parse(localStorage.getItem('healthData')) || [];
+        submittedData.push(record);
+        localStorage.setItem('healthData', JSON.stringify(submittedData));
+        
+        document.getElementById('healthForm').reset();
+        document.getElementById('centerSelect').disabled = true;
+        document.getElementById('systemsContainer').style.display = 'none';
+        document.getElementById('pathwaysContainer').style.display = 'none';
+        document.getElementById('interventionsContainer').style.display = 'none';
+        
+        alert('تم حفظ البيانات بنجاح!');
     }
 </script>
 
