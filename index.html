@@ -48,7 +48,7 @@
 
 <div class="container">
     <header>
-        <h1>تقييم الوعي بنموذج الرعاية السعودي</h1>
+        <h1>نظام إدارة وتقييم البيانات الصحية</h1>
         <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
@@ -70,7 +70,6 @@
                 </div>
             </div>
 
-            <!-- قائمة التخصصات المنسدلة -->
             <div class="form-group">
                 <label for="specialtySelect">التخصص:</label>
                 <select id="specialtySelect" required>
@@ -112,7 +111,7 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyFpZXwt4Ok2sW_q-dnmaM9F0ABoEUpfnh7DSS4zbM2qL3eiebblFCNhcam-R33eaVt6w/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwSmLej4iLv4J54DeSX14EGJ_le9r2dZqywyivInuKWEHK-cXSpzgFTXlj_txNoZ0betw/exec";
 
     const sectorData = {
         "الأمواه": ["مركز صحي ثجر سويدان", "مركز صحي العماير", "مركز صحي الامواه"],
@@ -201,7 +200,7 @@
         event.preventDefault();
         const sector = document.getElementById('sectorSelect').value;
         const center = document.getElementById('centerSelect').value;
-        const specialty = document.getElementById('specialtySelect').value; // التقاط قيمة التخصص من القائمة المنسدلة
+        const specialty = document.getElementById('specialtySelect').value;
         
         const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
         let systems = [];
