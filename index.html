@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة وتقييم البيانات الصحية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00838f;
+            --primary-dark: #006064;
+            --accent: #26a69a;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        header p {
+            color: #666;
+            font-size: 15px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Cairo', sans-serif;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        select:focus, input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.1);
+            outline: none;
+        }
+        .dynamic-container {
+            background-color: #f8fafc;
+            border-right: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+        .dynamic-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Cairo', sans-serif;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        .btn-export {
+            background-color: #27ae60;
+            margin-top: 15px;
+        }
+        .btn-export:hover {
+            background-color: #219653;
+        }
+        .btn-danger {
+            background-color: #c0392b;
+            font-size: 13px;
+            padding: 5px 10px;
+            width: auto;
+            margin: 0;
+        }
+        .btn-danger:hover {
+            background-color: #a93226;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #e0f2f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-box h4 {
+            margin: 0;
+            color: var(--primary-dark);
+            font-size: 14px;
+        }
+        .stat-box span {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>نظام إدارة وتقييم البيانات الصحية</h1>
+        <p>لوحة تفاعلية لإدخال ومتابعة القطاعات، المراكز، الأنظمة، والمسارات والتدخلات</p>
+    </header>
+
+    <div class="card">
+        <h3>إدخال تقييم جديد</h3>
+        <form id="healthForm" onsubmit="saveData(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="sectorSelect">القطاع الصحي:</label>
+                    <select id="sectorSelect" onchange="updateCenters()" required>
+                        <option value="">-- اختر القطاع --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="centerSelect">المركز الصحي التابع:</label>
+                    <select id="centerSelect" disabled required>
+                        <option value="">-- اختر المركز الصحي --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="systemsCount">عدد الأنظمة المطبقة:</label>
+                <input type="number" id="systemsCount" min="0" value="0" oninput="renderDynamicInputs('systems')">
+                <div id="systemsContainer" class="dynamic-container" style="display: none;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pathwaysCount">عدد المسارات المطبقة:</label>
+                <input type="number" id="pathwaysCount" min="0" value="0" oninput="renderDynamicInputs('pathways')">
+                <div id="pathwaysContainer" class="dynamic-container" style="display: none;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="interventionsCount">عدد التدخلات المطبقة:</label>
+                <input type="number" id="interventionsCount" min="0" value="0" oninput="renderDynamicInputs('interventions')">
+                <div id="interventionsContainer" class="dynamic-container" style="display: none;"></div>
+            </div>
+
+            <button type="submit" class="btn">حفظ وإضافة البيانات</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>
+            <span>لوحة الإحصائيات والبيانات المُسجلة</span>
+            <button type="button" class="btn btn-danger" onclick="clearAllData()">حذف كافة البيانات</button>
+        </h3>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h4>إجمالي السجلات</h4>
+                <span id="totalRecords">0</span>
+            </div>
+            <div class="stat-box">
+                <h4>إجمالي الأنظمة</h4>
+                <span id="totalSystems">0</span>
+            </div>
+            <div class="stat-box">
+                <h4>إجمالي المسارات والتدخلات</h4>
+                <span id="totalPathInt">0</span>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>القطاع</th>
+                        <th>المركز الصحي</th>
+                        <th>الأنظمة (الأسماء)</th>
+                        <th>المسارات (الأسماء والمنسقين)</th>
+                        <th>التدخلات (الأسماء والمنسقين)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button type="button" class="btn btn-export" onclick="exportToCSV()">سحب وتصدير البيانات (CSV)</button>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = 'healthData';
+
+    const sectorData = {
+        "الأمواه": ["مركز صحي ثجر سويدان", "مركز صحي العماير", "مركز صحي الامواه"],
+        "البرك": ["مركز الرعاية الصحية الأولية بالبرك", "مركز الرعاية الصحية الأولية الفيض", "مركز الرعاية الصحية الأولية بالسعيدة الصوالحه", "مركز الرعاية الصحية الأولية بذهبان", "مركز الرعاية الصحية الأولية ذراء", "مركز الرعاية الصحية الأولية براكه", "مركز الرعاية الصحية الأولية بعمق"],
+        "البشاير": ["مركز صحي شواص", "مركز الرعاية الصحية الاولية بخثعم", "مركز صحي البشائر", "الفوهه"],
+        "الحرجة": ["مركز صحي الرفغه والملاحه", "قطاع صحي الحرجة مركز صحي الغول", "مركز صحي راحة سنحان قطاع صحي الحرجه", "مركز صحي الحرجه", "مركز صحي يعوض الكوله للرعايه الصحيه الاوليه -قطاع الحرجه", "مركز صحي وادي الفيض قطاع الحرجه"],
+        "الشمالي": ["مركز صحي الديلمي"],
+        "العلاية": ["مركز صحي المطلا", "مركز الرعاية ببني عمرو", "مركز صحي الحميد", "مركز صحي شعف بلقرن", "مركز الرعاية الصحية الاولية بباشوت", "مركز صحي البظاظة الإستشاري", "مركز صحي سبت العلايا", "مركز صحي ال سلمة وال الزارية", "مركز صحي عفراء"],
+        "الغربي": ["مركز صحي الجعبه الرعايه الاوليه", "مركز الرعاية الصحية الاوليه بالثنية", "مركز صحي شديق", "مركز الرعاية الصحية الأولية تبالة بالمبرز", "مركز الرعاية الصحية الأولية بتبالة الفرع", "مركز الرعاية الصحية الاولية بالعفيرية"],
+        "الفرشة": ["القطاع الصحي بظهران الجنوب مركز صحي البقعة", "القطاع الصحي بظهران الجنوب مركز صحي الغايل", "مركز صحي الربوعة", "مركز صحي وادي الحيا", "مركز صحي الفرشة"],
+        "القحمة": ["خيرية الملك فيصل بالحريضة", "مركز الرعاية الاولية خيرية الامير سلطان بالقحمة", "مركز الرعاية الصحية الاولية بالحريضة", "مركز الرعاية الصحية الاولية بالقحمة"],
+        "المجاردة": ["مركز الرعاية الصحية الاوليه بخاط", "مركز الرعاية الصحية الاولية بختبة", "مركز الرعاية الصحية الاولية بأل غيلان", "مركز صحي شرق المجاردة", "مركز الرعاية الصحية الاولية بالطلاليع", "مركز الرعاية الصحية الاولية بالمجاردة", "مركز الرعاية الصحية الاولية بثربان", "مركز الرعاية الصحية الاولية بعبس", "مركز الرعاية الصحية الاولية شمال ثربان"],
+        "المدينة": ["مركز صحي الدحو", "مركز صحي جنوب المدينة", "مركز صحي الحرف", "مركز صحي الشداخة", "مركز الرعاية الصحية الاولية بالعطف", "مركز صحي مخطط 2", "مركز صحي مخطط 1", "مركز صحي نمران", "مركز صحي حي المطار", "مركز صحي الروشن", "مركز صحي صمخ", "مركز الرعاية الصحية الاولية بالجنينة", "مركز صحي الشقيقه", "مركز الرعاية الصحية الاولية بالنقيع", "مركز االرعاية الصحية الاولية بالرقيطاء", "مركز صحي واعر", "مركز صحي الحيفة", "مركز صحي الحازمي"],
+        "المضة": ["مركز الرعاية الصحية الاولية بطريب", "مركز الرعايه الصحيه بالصبيخه", "مركز صحي عرين قحطان", "مركز صحي جنوب طريب", "مركز صحي المضة", "مركز صحي شرق المضة", "مركز صحي ملحة الحباب", "مركز الرعايه الصحيه بالخنقه"],
+        "النماص": ["مركز صحي فرعة سلمان", "مركز صحي وادي زيد", "مركز صحي نشيان", "مركز صحي عاكسة", "مركز صحي النماص", "مركز صحي الظهاره", "مركز صحي حلباء", "ربوع السرو"],
+        "أبها": ["مركز الرعاية الصحية الأولية بريدة آل جليحة", "مركز الرعاية الصحية الأولية بالجهيفة", "مركز الرعاية الصحية الأولية بالسقا", "مركز الرعاية الصحية الأولية بالسودة", "مركز الرعاية الصحية الأولية بالشلفاء", "مركز الرعاية الصحية الأولية بالعرين بأبها", "مركز الرعاية الصحية الأولية بالعزيزية", "مركز الرعاية الصحية الأولية بالغيناء", "مركز الرعاية الصحية الأولية بالفرعاء", "مركز الرعاية الصحية الأولية بالقابل", "مركز الرعاية الصحية الأولية بالقلفاء", "مركز الرعاية الصحية الأولية بالمحالة", "مركز الرعاية الصحية الأولية بالمسقي", "مركز الرعاية الصحية الأولية بالمصنعة", "مركز الرعاية الصحية الأولية بالملاحة", "مركز الرعاية الصحية الأولية بالمنسك", "مركز الرعاية الصحية الأولية بالمنهل", "مركز الرعاية الصحية الأولية بالنميص", "مركز الرعاية الصحية الأولية بآل السريع", "مركز الرعاية الصحية الأولية بآل سرحان", "مركز الرعاية الصحية الأولية بآل يزيد", "مركز الرعاية الصحية الأولية بباحة ربيعة", "مركز الرعاية الصحية الأولية ببني شدان", "مركز الرعاية الصحية الأولية بتمنية", "مركز الرعاية الصحية الأولية بحي الموظفين", "مركز الرعاية الصحية الأولية بطبب", "مركز الرعاية الصحية الأولية بعلو مربه", "مركز الرعاية الصحية الأولية بغرب أبها", "مركز الرعاية الصحية الأولية بمدينة سلطان", "مركز الرعاية الصحية الأولية بمربة السفلى", "مركز الرعاية الصحية الأولية بوادي تضرع", "مركز الرعاية الصحية الأولية بوادي حلالي", "مركز الرعاية الصحية الأولية بوادي ذهب", "مركز صحي وسط أبها"],
+        "أحد رفيدة": ["مركز الرعاية الصحية الاولية بالواديين", "مركز الرعاية الصحية الأولية بالصمخية", "مركز الرعاية الصحية الأولية بآل بريد", "مركز صحي الفرعين", "مركز صحي خيرية الملك فيصل", "مركز صحي ال حلامي", "مركز صحي أحد رفيدة", "مركز الرعاية الصحية الأولية بالرونة", "مركز الرعاية الصحية الأولية بشعف جارمة", "مركز الرعاية الصحية الأولية بعرق بالحنا"],
+        "بارق": ["مركز صحي ثلوث المنظر", "مركز الرعايه الاوليه بالسليم", "مركز الرعاية الصحية الاولية بجمعة ربيعة المقاطرة", "مركز الرعاية الصحية الاولية بالخوش", "مركز الرعاية الصحية الأولية بوادي سهول", "مركز الرعاية الصحية الاوليه ببارق", "مركز صحي جنوب بارق", "مركز الرعاية الصحية الأولية بوادي الخير", "مركز الرعاية الصحية الأولية بخلصة نصبه", "مركز صحى ضحى سيالة", "مركز الرعاية الصحية الأولية بالمسلمة", "مركز صحى القريحاء", "مركز صحي صعبان"],
+        "بللحمر": ["مركز الرعاية الصحية الأولية بالماوين", "مركز الرعاية الصحية بعبل", "مركز صحي صلحلح", "مركز الرعاية الصحي الأولية بصبح", "مركز صحي بهوان", "مركز صحي بيحان"],
+        "بللسمر": ["مركز صحي سدوان", "مركز الرعاية الصحية الأولية بخارف", "مركز الرعاية الصحية الاولية حوراء", "مركز صحي ببللسمر"],
+        "تثليث": ["مركز صحي ربة", "مركز صحي تثليث", "مركز صحي القيرة", "مركز صحي الحمضة", "مركز صحي الزرق", "مركز صحي يهرا", "مركز صحي جاش", "مركز صحي غرب تثليث"],
+        "تنومه": ["مركز صحي سبت تنومة", "مركز صحي ترج", "مركز صحي سهل تنومة", "مركز صحي منصبة"],
+        "خميس مشيط": ["مركز الرعاية الصحية الاولية بأم سرار", "كود صفية", "مركز صحي الحي الجديد", "مركز الرعاية الصحية الاولية بتندحة الزلال", "مركز صحي عتود العمائر", "مركز الرعاية الصحية الأولية المخطط 1", "مركز الرعاية الصحية الاولية بابن سيناء", "مركز الرعاية الصحية الاولية بشباعة", "مركز الرعاية الصحية الاولية بالهميلة", "مركز الرعاية الصحية الاولية بحي الضباط", "مركز الرعاية الصحية الأولية بالشرفية", "مركز الرعاية الصحية الأولية بشمال المطار", "مركز صحي الحفاير", "مركز الرعاية الصحية الأولية بغرب خميس مشيط", "مركز الرعاية الصحية الاولية بصناعية", "مركز الرعاية الصحية الاولية التنمية الاجتماعية", "مركز الرعاية الصحية الاولية بالهرير و ذلاله", "مركز الرعاية الصحية العمارة", "مركز الرعاية الصحية الأولية بشرق خميس مشيط", "مركز الرعاية الصحية الاولية بالرصراص"],
+        "رجال ألمع": ["مركز الرعاية الصحية الأولية المجمعة والعقل", "مركز الرعاية الصحية الأولية بالجرف", "مركز الرعاية الصحية الاولية بصلب", "مركز الرعاية الصحية الأولية بغمره", "مركز الرعاية الصحية الأولية بوسانب", "مركز الرعاية الصحية الأولية بالنجدين", "مركز الرعاية الصحية الأولية بثلوث حسوة", "مركز الرعاية الصحية الأولية بالبتيلة", "مركز الرعاية الصحية الأولية بالشعبين", "مركز الرعاية الصحية الأولية بالأهمال", "مركز الرعاية الصحية الاولية ببني جونة", "مركز الرعاية الصحية الاولية بحورة قيس", "مركز الرعاية الصحية الأولية بالحبيل", "مركز الرعاية الصحية الأولية بثلوث ريم", "مركز الرعاية الصحية الأولية بروام"],
+        "سراة عبيدة": ["مركز صحي سراة عبيدة", "مركز صحي سبت بني بشر", "مركز صحي العرضين", "مركز صحي العرقين", "مركز صحي عين اللوي", "مركز صحي الوهابة", "مركز صحي الجوة", "مركز صحي ال خلف", "مركز صحي العسران", "مركز صحي جوف ال معمر"],
+        "ظهران الجنوب": ["القطاع الصحي بظهران الجنوب- مركز صحي كتام", "القطاع الحصي بظهران الجنوب- مركز الغيل", "مركز الرعاية الاولية الصحية بالطلحة", "الفطاع الصحي بظهران الجنوب -مركز الحاجر", "القطاع الصحي بظهران الجنوب- مركز صحي ظهران", "القطاع الصحي بظهران الجنوب - الرحيب الغربي"],
+        "محايل": ["مركز صحي الريش", "مركز صحي قنا", "مركز صحي الطحاحين", "مركز صحي ترقش", "مركز صحي المقاعد", "مركز صحي فرشاط", "مركز صحي حميد العلايا", "مركز صحي وسط محايل", "مركز صحي الضرس", "مركز صحي غرب محايل1", "مركز صحي اخلال", "مركز صحي خميس مطير", "مركز صحي بني ذيب", "مركز صحي غرب محايل2", "مركز صحي لتين", "مركز صحي حبطن", "مركز صحي بحر ابو سكينة", "مركز محايل الصحي", "مركز صحي الحضن والكدس", "مركز صحي سحر ال عاصم", "مركز صحي المنجحة", "مركز صحي ال ختارش"],
+        "وادي بن هشبل": ["مركز صحى وادى بن هشبل", "مركز الرعاية الصحية الاولية ببريم السليل", "مركز الرعاية الصحية الاولية بالشيق", "مركز الرعاية الصحية بخيبر الجنوب", "مركز الرعاية الصحية بشفان", "مركز الرعايه الصحيه الاوليه بالحيمه", "مركز صحي البطنه", "مركز صحي شمال خيبر الجنوب", "مركز الرعاية الصحية الاولية بيعرى"],
+        "وادي ترج": ["مركز صحي البهيم", "مركز صحي المحاله", "مركز صحي الغفرات", "مركز صحي مهر", "مركز الرعاية الصحية الأولية بالقوباء", "مركز صحي حوران"]
+    };
+
+    function loadStoredData() {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (!stored) return [];
+            const parsed = JSON.parse(stored);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('تعذر قراءة البيانات المحفوظة:', error);
+            localStorage.removeItem(STORAGE_KEY);
+            return [];
+        }
+    }
+
+    let submittedData = loadStoredData();
+
+    window.onload = function() {
+        const sectorSelect = document.getElementById('sectorSelect');
+        Object.keys(sectorData).sort().forEach(sector => {
+            const opt = document.createElement('option');
+            opt.value = sector;
+            opt.textContent = sector;
+            sectorSelect.appendChild(opt);
+        });
+        updateDashboard();
+    };
+
+    function updateCenters() {
+        const sectorSelect = document.getElementById('sectorSelect');
+        const centerSelect = document.getElementById('centerSelect');
+        const selectedSector = sectorSelect.value;
+
+        centerSelect.innerHTML = '<option value="">-- اختر المركز الصحي --</option>';
+
+        if (selectedSector && sectorData[selectedSector]) {
+            sectorData[selectedSector].forEach(center => {
+                const opt = document.createElement('option');
+                opt.value = center;
+                opt.textContent = center;
+                centerSelect.appendChild(opt);
+            });
+            centerSelect.disabled = false;
+        } else {
+            centerSelect.disabled = true;
+        }
+    }
+
+    function renderDynamicInputs(type) {
+        const countId = `${type}Count`;
+        const containerId = `${type}Container`;
+        const count = parseInt(document.getElementById(countId).value) || 0;
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        if (count > 0) {
+            container.style.display = 'block';
+            for (let i = 1; i <= count; i++) {
+                const div = document.createElement('div');
+                div.className = 'dynamic-item';
+
+                if (type === 'systems') {
+                    div.innerHTML = `
+                        <label>اسم النظام (${i}):</label>
+                        <input type="text" id="system_${i}" placeholder="أدخل اسم النظام" required>
+                    `;
+                } else if (type === 'pathways') {
+                    div.innerHTML = `
+                        <div class="grid-2">
+                            <div>
+                                <label>اسم المسار (${i}):</label>
+                                <input type="text" id="pathway_name_${i}" placeholder="أدخل اسم المسار" required>
+                            </div>
+                            <div>
+                                <label>اسم المنسق:</label>
+                                <input type="text" id="pathway_coord_${i}" placeholder="أدخل اسم منسق المسار" required>
+                            </div>
+                        </div>
+                    `;
+                } else if (type === 'interventions') {
+                    div.innerHTML = `
+                        <div class="grid-2">
+                            <div>
+                                <label>اسم التدخل (${i}):</label>
+                                <input type="text" id="inter_name_${i}" placeholder="أدخل اسم التدخل" required>
+                            </div>
+                            <div>
+                                <label>اسم المنسق:</label>
+                                <input type="text" id="inter_coord_${i}" placeholder="أدخل اسم منسق التدخل" required>
+                            </div>
+                        </div>
+                    `;
+                }
+                container.appendChild(div);
+            }
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    function collectSystems() {
+        const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
+        const systems = [];
+
+        for (let i = 1; i <= systemsCount; i++) {
+            const value = document.getElementById(`system_${i}`)?.value.trim();
+            if (value) systems.push(value);
+        }
+
+        return systems;
+    }
+
+    function collectNamedEntries(prefix, nameKey, coordKey, itemLabel) {
+        const count = parseInt(document.getElementById(`${prefix}Count`).value) || 0;
+        const entries = [];
+
+        for (let i = 1; i <= count; i++) {
+            const name = document.getElementById(`${nameKey}${i}`)?.value.trim();
+            const coord = document.getElementById(`${coordKey}${i}`)?.value.trim();
+
+            if (name || coord) {
+                if (!name || !coord) {
+                    throw new Error(`يرجى تعبئة اسم ${itemLabel} ومنسقه في السطر ${i}.`);
+                }
+                entries.push({ name, coord });
+            }
+        }
+
+        return entries;
+    }
+
+    function saveData(event) {
+        event.preventDefault();
+
+        const sector = document.getElementById('sectorSelect').value.trim();
+        const center = document.getElementById('centerSelect').value.trim();
+
+        if (!sector || !center) {
+            alert('يرجى اختيار القطاع والمركز الصحي أولاً.');
+            return;
+        }
+
+        try {
+            const systems = collectSystems();
+            const pathways = collectNamedEntries('pathways', 'pathway_name_', 'pathway_coord_', 'المسار');
+            const interventions = collectNamedEntries('interventions', 'inter_name_', 'inter_coord_', 'التدخل');
+
+            const record = { sector, center, systems, pathways, interventions };
+            submittedData.push(record);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(submittedData));
+            updateDashboard();
+
+            document.getElementById('healthForm').reset();
+            document.getElementById('centerSelect').disabled = true;
+            document.getElementById('systemsContainer').style.display = 'none';
+            document.getElementById('pathwaysContainer').style.display = 'none';
+            document.getElementById('interventionsContainer').style.display = 'none';
+
+            alert('تم حفظ البيانات بنجاح في النظام!');
+        } catch (error) {
+            alert(error.message || 'حدث خطأ أثناء حفظ البيانات.');
+        }
+    }
+
+    function updateDashboard() {
+        document.getElementById('totalRecords').textContent = submittedData.length;
+
+        const totalSys = submittedData.reduce((sum, item) => sum + (Array.isArray(item.systems) ? item.systems.length : 0), 0);
+        const totalPathInt = submittedData.reduce((sum, item) => sum + (Array.isArray(item.pathways) ? item.pathways.length : 0) + (Array.isArray(item.interventions) ? item.interventions.length : 0), 0);
+
+        document.getElementById('totalSystems').textContent = totalSys;
+        document.getElementById('totalPathInt').textContent = totalPathInt;
+
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+
+        if (submittedData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td></tr>';
+            return;
+        }
+
+        submittedData.forEach(item => {
+            const sysText = Array.isArray(item.systems) && item.systems.length > 0 ? item.systems.join('، ') : '-';
+            const pathText = Array.isArray(item.pathways) && item.pathways.length > 0 ? item.pathways.map(p => `${p.name} (المنسق: ${p.coord})`).join(' | ') : '-';
+            const interText = Array.isArray(item.interventions) && item.interventions.length > 0 ? item.interventions.map(int => `${int.name} (المنسق: ${int.coord})`).join(' | ') : '-';
+
+            const row = `<tr>
+                <td>${item.sector || '-'}</td>
+                <td>${item.center || '-'}</td>
+                <td>${sysText}</td>
+                <td>${pathText}</td>
+                <td>${interText}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    function clearAllData() {
+        if (confirm('هل أنت متأكد من رغبتك في حذف جميع البيانات المُسجلة؟')) {
+            submittedData = [];
+            localStorage.removeItem(STORAGE_KEY);
+            updateDashboard();
+            alert('تم مسح كافة البيانات.');
+        }
+    }
+
+    function exportToCSV() {
+        if (submittedData.length === 0) {
+            alert('لا توجد بيانات لتصديرها حالياً.');
+            return;
+        }
+
+        let csvContent = '\uFEFFالقطاع,المركز الصحي,الأنظمة,المسارات ومنسقيها,التدخلات ومنسقيها\n';
+        submittedData.forEach(item => {
+            const sys = Array.isArray(item.systems) ? item.systems.join(' - ') : '';
+            const paths = Array.isArray(item.pathways) ? item.pathways.map(p => `${p.name} [منسق: ${p.coord}]`).join(' - ') : '';
+            const inters = Array.isArray(item.interventions) ? item.interventions.map(i => `${i.name} [منسق: ${i.coord}]`).join(' - ') : '';
+
+            csvContent += `"${item.sector || ''}","${item.center || ''}","${sys}","${paths}","${inters}"\n`;
+        });
+
+        const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'health_evaluation_data.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
