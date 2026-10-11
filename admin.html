@@ -62,6 +62,7 @@
                         <tr>
                             <th>القطاع</th>
                             <th>المركز الصحي</th>
+                            <th>التخصص</th>
                             <th>الأنظمة</th>
                             <th>المسارات ومنسقيها</th>
                             <th>التدخلات ومنسقيها</th>
@@ -69,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr><td colspan="6" style="text-align: center;">جاري جلب البيانات...</td></tr>
+                        <tr><td colspan="7" style="text-align: center;">جاري جلب البيانات...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -80,7 +81,7 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyFpZXwt4Ok2sW_q-dnmaM9F0ABoEUpfnh7DSS4zbM2qL3eiebblFCNhcam-R33eaVt6w/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwSmLej4iLv4J54DeSX14EGJ_le9r2dZqywyivInuKWEHK-cXSpzgFTXlj_txNoZ0betw/exec";
     const ADMIN_PASS = "123456";
     let submittedData = [];
 
@@ -97,7 +98,7 @@
 
     async function loadSheetData() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888;">جاري جلب البيانات من Google Sheets...</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #888;">جاري جلب البيانات من Google Sheets...</td></tr>`;
         
         try {
             let response = await fetch(WEB_APP_URL);
@@ -106,14 +107,13 @@
             updateDashboard();
         } catch (e) {
             console.error("خطأ في جلب البيانات:", e);
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">فشل جلب البيانات. تأكد من اتصال الإنترنت أو صحة النشر.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">فشل جلب البيانات. تأكد من اتصال الإنترنت أو صحة النشر.</td></tr>`;
         }
     }
 
     function updateDashboard() {
         document.getElementById('totalRecords').textContent = submittedData.length;
         
-        // حساب الإحصائيات التقريبية بناءً على النصوص المخزنة
         let totalSys = submittedData.reduce((sum, item) => sum + (item.systemsText && item.systemsText !== "" ? item.systemsText.split(' - ').length : 0), 0);
         let totalPath = submittedData.reduce((sum, item) => sum + (item.pathwaysText && item.pathwaysText !== "" ? item.pathwaysText.split(' - ').length : 0), 0);
         let totalInter = submittedData.reduce((sum, item) => sum + (item.interventionsText && item.interventionsText !== "" ? item.interventionsText.split(' - ').length : 0), 0);
@@ -125,7 +125,7 @@
         tableBody.innerHTML = '';
 
         if (submittedData.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #888;">لا توجد بيانات مُدخلة حتى الآن</td></tr>`;
             return;
         }
 
@@ -133,6 +133,7 @@
             let row = `<tr>
                 <td>${item.sector || ''}</td>
                 <td>${item.center || ''}</td>
+                <td>${item.specialty || '-'}</td>
                 <td>${item.systemsText || '-'}</td>
                 <td>${item.pathwaysText || '-'}</td>
                 <td>${item.interventionsText || '-'}</td>
@@ -148,9 +149,9 @@
             return;
         }
 
-        let csvContent = "\uFEFFالقطاع,المركز الصحي,الأنظمة,المسارات ومنسقيها,التدخلات ومنسقيها,تاريخ الإدخال\n";
+        let csvContent = "\uFEFFالقطاع,المركز الصحي,التخصص,الأنظمة,المسارات ومنسقيها,التدخلات ومنسقيها,تاريخ الإدخال\n";
         submittedData.forEach(item => {
-            csvContent += `"${item.sector || ''}","${item.center || ''}","${item.systemsText || ''}","${item.pathwaysText || ''}","${item.interventionsText || ''}","${item.date || ''}"\n`;
+            csvContent += `"${item.sector || ''}","${item.center || ''}","${item.specialty || ''}","${item.systemsText || ''}","${item.pathwaysText || ''}","${item.interventionsText || ''}","${item.date || ''}"\n`;
         });
 
         let encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
