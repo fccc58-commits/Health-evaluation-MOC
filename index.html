@@ -49,7 +49,7 @@
 <div class="container">
     <header>
         <h1>تقييم الوعي بنموذج الرعاية السعودي</h1>
-        <p>تقييم الوعي بنموذج الرعاية السعودي</p>
+        <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
     <div class="card">
@@ -70,9 +70,10 @@
                 </div>
             </div>
 
+            <!-- قائمة التخصصات مع خيار أخرى -->
             <div class="form-group">
                 <label for="specialtySelect">التخصص:</label>
-                <select id="specialtySelect" required>
+                <select id="specialtySelect" onchange="checkOtherSpecialty()" required>
                     <option value="">-- اختر التخصص --</option>
                     <option value="طبيب">طبيب</option>
                     <option value="تمريض">تمريض</option>
@@ -80,7 +81,11 @@
                     <option value="مختبر">مختبر</option>
                     <option value="صحة عامة">صحة عامة</option>
                     <option value="إداري">إداري</option>
+                    <option value="أخرى">أخرى (حدد التخصص)</option>
                 </select>
+                <div id="otherSpecialtyContainer" style="display: none; margin-top: 10px;">
+                    <input type="text" id="otherSpecialtyInput" placeholder="أدخل التخصص الجديد هنا">
+                </div>
             </div>
 
             <div class="form-group">
@@ -171,6 +176,20 @@
         }
     };
 
+    window.checkOtherSpecialty = function() {
+        const specialtySelect = document.getElementById('specialtySelect');
+        const otherContainer = document.getElementById('otherSpecialtyContainer');
+        const otherInput = document.getElementById('otherSpecialtyInput');
+        if (specialtySelect.value === 'أخرى') {
+            otherContainer.style.display = 'block';
+            otherInput.required = true;
+        } else {
+            otherContainer.style.display = 'none';
+            otherInput.required = false;
+            otherInput.value = '';
+        }
+    };
+
     window.renderDynamicInputs = function(type) {
         let countId = type + 'Count';
         let containerId = type + 'Container';
@@ -200,7 +219,13 @@
         event.preventDefault();
         const sector = document.getElementById('sectorSelect').value;
         const center = document.getElementById('centerSelect').value;
-        const specialty = document.getElementById('specialtySelect').value;
+        
+        let specialtySelectVal = document.getElementById('specialtySelect').value;
+        let specialty = specialtySelectVal;
+        if (specialtySelectVal === 'أخرى') {
+            let customVal = document.getElementById('otherSpecialtyInput').value;
+            specialty = 'أخرى: ' + customVal;
+        }
         
         const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
         let systems = [];
@@ -245,6 +270,7 @@
             alert('تم حفظ البيانات بنجاح!');
             document.getElementById('healthForm').reset();
             document.getElementById('centerSelect').disabled = true;
+            document.getElementById('otherSpecialtyContainer').style.display = 'none';
             document.getElementById('systemsContainer').style.display = 'none';
             document.getElementById('pathwaysContainer').style.display = 'none';
             document.getElementById('interventionsContainer').style.display = 'none';
