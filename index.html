@@ -32,7 +32,7 @@
         @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 14px; }
-        select, input[type="number"], input[type="text"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-family: 'Cairo', sans-serif; box-sizing: border-box; }
+        select, input[type="number"], input[type="text"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-family: 'Cairo', sans-serif; box-sizing: border-box; background-color: #fff; }
         select:focus, input:focus { border-color: var(--primary); outline: none; }
         .dynamic-container { background-color: #f8fafc; border-right: 4px solid var(--primary); padding: 15px; margin-top: 10px; border-radius: 6px; }
         .dynamic-item { margin-bottom: 12px; padding: 12px; background: #fff; border: 1px solid var(--border-color); border-radius: 6px; }
@@ -48,7 +48,7 @@
 
 <div class="container">
     <header>
-        <h1>تقييم الوعي بنظام ومسارات الأمراض المزمنة </h1>
+        <h1>تقييم الوعي بنموذج الرعاية السعودي</h1>
         <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
@@ -70,10 +70,18 @@
                 </div>
             </div>
 
-            <!-- خانة التخصص الجديدة -->
+            <!-- قائمة التخصصات المنسدلة -->
             <div class="form-group">
-                <label for="specialtyInput">التخصص:</label>
-                <input type="text" id="specialtyInput" placeholder="أدخل التخصص (مثال: طب أسرة، تمريض، إبداري...)" required>
+                <label for="specialtySelect">التخصص:</label>
+                <select id="specialtySelect" required>
+                    <option value="">-- اختر التخصص --</option>
+                    <option value="طبيب">طبيب</option>
+                    <option value="تمريض">تمريض</option>
+                    <option value="اشعة">اشعة</option>
+                    <option value="مختبر">مختبر</option>
+                    <option value="صحة عامة">صحة عامة</option>
+                    <option value="إداري">إداري</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -193,7 +201,7 @@
         event.preventDefault();
         const sector = document.getElementById('sectorSelect').value;
         const center = document.getElementById('centerSelect').value;
-        const specialty = document.getElementById('specialtyInput').value; // التقاط قيمة التخصص
+        const specialty = document.getElementById('specialtySelect').value; // التقاط قيمة التخصص من القائمة المنسدلة
         
         const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
         let systems = [];
@@ -239,7 +247,6 @@
             document.getElementById('healthForm').reset();
             document.getElementById('centerSelect').disabled = true;
             document.getElementById('systemsContainer').style.display = 'none';
-            document.getElementById('pathwaysContainer').style.display, 'none';
             document.getElementById('pathwaysContainer').style.display = 'none';
             document.getElementById('interventionsContainer').style.display = 'none';
         } catch (e) {
