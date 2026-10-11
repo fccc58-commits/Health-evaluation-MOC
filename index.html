@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> تقييم الوعي بنموذج الرعاية السعودي</title>
+    <title>تقييم الوعي بنموذج الرعاية السعودي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,7 +48,7 @@
 
 <div class="container">
     <header>
-        <h1>نظام إدارة وتقييم البيانات الصحية</h1>
+        <h1>تقييم الوعي بنظام ومسارات الأمراض المزمنة </h1>
         <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
@@ -68,6 +68,12 @@
                         <option value="">-- اختر المركز الصحي --</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- خانة التخصص الجديدة -->
+            <div class="form-group">
+                <label for="specialtyInput">التخصص:</label>
+                <input type="text" id="specialtyInput" placeholder="أدخل التخصص (مثال: طب أسرة، تمريض، إبداري...)" required>
             </div>
 
             <div class="form-group">
@@ -187,6 +193,7 @@
         event.preventDefault();
         const sector = document.getElementById('sectorSelect').value;
         const center = document.getElementById('centerSelect').value;
+        const specialty = document.getElementById('specialtyInput').value; // التقاط قيمة التخصص
         
         const systemsCount = parseInt(document.getElementById('systemsCount').value) || 0;
         let systems = [];
@@ -212,7 +219,7 @@
         }
 
         const record = {
-            sector, center, systems, pathways, interventions,
+            sector, center, specialty, systems, pathways, interventions,
             date: new Date().toLocaleString('ar-SA')
         };
 
@@ -228,17 +235,18 @@
                 body: JSON.stringify(record)
             });
 
-            alert('تم حفظ البيانات  بنجاح!');
+            alert('تم حفظ البيانات بنجاح!');
             document.getElementById('healthForm').reset();
             document.getElementById('centerSelect').disabled = true;
             document.getElementById('systemsContainer').style.display = 'none';
+            document.getElementById('pathwaysContainer').style.display, 'none';
             document.getElementById('pathwaysContainer').style.display = 'none';
             document.getElementById('interventionsContainer').style.display = 'none';
         } catch (e) {
             console.error("خطأ:", e);
             alert('حدث خطأ أثناء الإرسال.');
         } finally {
-            submitBtn.textContent = 'حفظ وإرسال البيانات ';
+            submitBtn.textContent = 'حفظ وإرسال البيانات';
             submitBtn.disabled = false;
         }
     };
