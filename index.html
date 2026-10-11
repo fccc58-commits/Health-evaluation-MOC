@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة وتقييم البيانات الصحية</title>
+    <title> تقييم الوعي بنموذج الرعاية السعودي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,120 +22,26 @@
             padding: 20px;
             color: var(--text-color);
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-        header p {
-            color: #666;
-            font-size: 15px;
-        }
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-        }
-        .card h3 {
-            margin-top: 0;
-            color: var(--primary-dark);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-        select, input[type="number"], input[type="text"] {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: 'Cairo', sans-serif;
-            box-sizing: border-box;
-            transition: all 0.3s;
-        }
-        select:focus, input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.1);
-            outline: none;
-        }
-        .dynamic-container {
-            background-color: #f8fafc;
-            border-right: 4px solid var(--primary);
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 6px;
-        }
-        .dynamic-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-        }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            font-family: 'Cairo', sans-serif;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background-color: var(--primary-dark);
-        }
-        .admin-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .admin-link a {
-            color: #777;
-            text-decoration: none;
-            font-size: 13px;
-        }
-        .admin-link a:hover {
-            color: var(--primary);
-            text-decoration: underline;
-        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        header p { color: #666; font-size: 15px; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .card h3 { margin-top: 0; color: var(--primary-dark); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 14px; }
+        select, input[type="number"], input[type="text"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-family: 'Cairo', sans-serif; box-sizing: border-box; }
+        select:focus, input:focus { border-color: var(--primary); outline: none; }
+        .dynamic-container { background-color: #f8fafc; border-right: 4px solid var(--primary); padding: 15px; margin-top: 10px; border-radius: 6px; }
+        .dynamic-item { margin-bottom: 12px; padding: 12px; background: #fff; border: 1px solid var(--border-color); border-radius: 6px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { background-color: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; transition: background 0.3s; margin-top: 10px; }
+        .btn:hover { background-color: var(--primary-dark); }
+        .admin-link { text-align: center; margin-top: 15px; }
+        .admin-link a { color: #777; text-decoration: none; font-size: 13px; }
+        .admin-link a:hover { color: var(--primary); text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -146,10 +52,9 @@
         <p>بوابة إدخال البيانات للقطاعات والمراكز الصحية</p>
     </header>
 
-    <!-- نموذج الإدخال -->
     <div class="card">
         <h3>إدخال تقييم جديد</h3>
-        <form id="healthForm" onsubmit="saveData(event)">
+        <form id="healthForm" onsubmit="saveDataToSheet(event)">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="sectorSelect">القطاع الصحي:</label>
@@ -157,7 +62,6 @@
                         <option value="">-- اختر القطاع --</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="centerSelect">المركز الصحي التابع:</label>
                     <select id="centerSelect" disabled required>
@@ -166,28 +70,25 @@
                 </div>
             </div>
 
-            <!-- 1. الأنظمة المطبقة -->
             <div class="form-group">
                 <label for="systemsCount">عدد الأنظمة المطبقة:</label>
                 <input type="number" id="systemsCount" min="0" value="0" oninput="renderDynamicInputs('systems')">
                 <div id="systemsContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
-            <!-- 2. المسارات المطبقة -->
             <div class="form-group">
                 <label for="pathwaysCount">عدد المسارات المطبقة:</label>
                 <input type="number" id="pathwaysCount" min="0" value="0" oninput="renderDynamicInputs('pathways')">
                 <div id="pathwaysContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
-            <!-- 3. التدخلات المطبقة -->
             <div class="form-group">
                 <label for="interventionsCount">عدد التدخلات المطبقة:</label>
                 <input type="number" id="interventionsCount" min="0" value="0" oninput="renderDynamicInputs('interventions')">
                 <div id="interventionsContainer" class="dynamic-container" style="display: none;"></div>
             </div>
 
-            <button type="submit" class="btn">حفظ وإرسال البيانات</button>
+            <button type="submit" class="btn">حفظ وإرسال البيانات إلى قوقل شيت</button>
         </form>
     </div>
 
@@ -197,6 +98,8 @@
 </div>
 
 <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyFpZXwt4Ok2sW_q-dnmaM9F0ABoEUpfnh7DSS4zbM2qL3eiebblFCNhcam-R33eaVt6w/exec";
+
     const sectorData = {
         "الأمواه": ["مركز صحي ثجر سويدان", "مركز صحي العماير", "مركز صحي الامواه"],
         "البرك": ["مركز الرعاية الصحية الأولية بالبرك", "مركز الرعاية الصحية الأولية الفيض", "مركز الرعاية الصحية الأولية بالسعيدة الصوالحه", "مركز الرعاية الصحية الأولية بذهبان", "مركز الرعاية الصحية الأولية ذراء", "مركز الرعاية الصحية الأولية براكه", "مركز الرعاية الصحية الأولية بعمق"],
@@ -207,7 +110,7 @@
         "الغربي": ["مركز صحي الجعبه الرعايه الاوليه", "مركز الرعاية الصحية الاوليه بالثنية", "مركز صحي شديق", "مركز الرعاية الصحية الأولية تبالة بالمبرز", "مركز الرعاية الصحية الأولية بتبالة الفرع", "مركز الرعاية الصحية الاولية بالعفيرية"],
         "الفرشة": ["القطاع الصحي بظهران الجنوب مركز صحي البقعة", "القطاع الصحي بظهران الجنوب مركز صحي الغايل", "مركز صحي الربوعة", "مركز صحي وادي الحيا", "مركز صحي الفرشة"],
         "القحمة": ["خيرية الملك فيصل بالحريضة", "مركز الرعاية الاولية خيرية الامير سلطان بالقحمة", "مركز الرعاية الصحية الاولية بالحريضة", "مركز الرعاية الصحية الاولية بالقحمة"],
-        "المجاردة": ["مركز الرعاية الصحية الاوليه بخاط", "مركز الرعاية الصحية الاولية بختبة", "مركز الرعاية الصحية الاولية بأل غيلان", "مركز صحي شرق المجاردة", "مركز الرعاية الصحية الاولية بالطلاليع", "مركز الرعاية الصحية الاولية بالمجاردة", "مركز الرعاية الصحية الاولية بثربان", "مركز الرعاية الصحية الاولية بعبس", "مركز الرعاية الصحية الاولية شمال ثربان"],
+        "المجاردة": ["مركز الرعاية الصحية الاوليه بخاط", "مركز الرعاية الصحية الأولية بختبة", "مركز الرعاية الصحية الأولية بأل غيلان", "مركز صحي شرق المجاردة", "مركز الرعاية الصحية الاولية بالطلاليع", "مركز الرعاية الصحية الاولية بالمجاردة", "مركز الرعاية الصحية الاولية بثربان", "مركز الرعاية الصحية الاولية بعبس", "مركز الرعاية الصحية الاولية شمال ثربان"],
         "المدينة": ["مركز صحي الدحو", "مركز صحي جنوب المدينة", "مركز صحي الحرف", "مركز صحي الشداخة", "مركز الرعاية الصحية الاولية بالعطف", "مركز صحي مخطط 2", "مركز صحي مخطط 1", "مركز صحي نمران", "مركز صحي حي المطار", "مركز صحي الروشن", "مركز صحي صمخ", "مركز الرعاية الصحية الاولية بالجنينة", "مركز صحي الشقيقه", "مركز الرعاية الصحية الاولية بالنقيع", "مركز االرعاية الصحية الاولية بالرقيطاء", "مركز صحي واعر", "مركز صحي الحيفة", "مركز صحي الحازمي"],
         "المضة": ["مركز الرعاية الصحية الاولية بطريب", "مركز الرعايه الصحيه بالصبيخه", "مركز صحي عرين قحطان", "مركز صحي جنوب طريب", "مركز صحي المضة", "مركز صحي شرق المضة", "مركز صحي ملحة الحباب", "مركز الرعايه الصحيه بالخنقه"],
         "النماص": ["مركز صحي فرعة سلمان", "مركز صحي وادي زيد", "مركز صحي نشيان", "مركز صحي عاكسة", "مركز صحي النماص", "مركز صحي الظهاره", "مركز صحي حلباء", "ربوع السرو"],
@@ -237,13 +140,11 @@
         });
     };
 
-    function updateCenters() {
+    window.updateCenters = function() {
         const sectorSelect = document.getElementById('sectorSelect');
         const centerSelect = document.getElementById('centerSelect');
         const selectedSector = sectorSelect.value;
-
         centerSelect.innerHTML = '<option value="">-- اختر المركز الصحي --</option>';
-
         if (selectedSector && sectorData[selectedSector]) {
             sectorData[selectedSector].forEach(center => {
                 const opt = document.createElement('option');
@@ -255,63 +156,35 @@
         } else {
             centerSelect.disabled = true;
         }
-    }
+    };
 
-    function renderDynamicInputs(type) {
+    window.renderDynamicInputs = function(type) {
         let countId = type + 'Count';
         let containerId = type + 'Container';
         let count = parseInt(document.getElementById(countId).value) || 0;
         let container = document.getElementById(containerId);
         container.innerHTML = '';
-
         if (count > 0) {
             container.style.display = 'block';
             for (let i = 1; i <= count; i++) {
                 let div = document.createElement('div');
                 div.className = 'dynamic-item';
-                
                 if (type === 'systems') {
-                    div.innerHTML = `
-                        <label>اسم النظام (${i}):</label>
-                        <input type="text" id="system_${i}" placeholder="أدخل اسم النظام" required>
-                    `;
+                    div.innerHTML = `<label>اسم النظام (${i}):</label><input type="text" id="system_${i}" placeholder="أدخل اسم النظام" required>`;
                 } else if (type === 'pathways') {
-                    div.innerHTML = `
-                        <div class="grid-2">
-                            <div>
-                                <label>اسم المسار (${i}):</label>
-                                <input type="text" id="pathway_name_${i}" placeholder="أدخل اسم المسار" required>
-                            </div>
-                            <div>
-                                <label>اسم المنسق:</label>
-                                <input type="text" id="pathway_coord_${i}" placeholder="أدخل اسم منسق المسار" required>
-                            </div>
-                        </div>
-                    `;
+                    div.innerHTML = `<div class="grid-2"><div><label>اسم المسار (${i}):</label><input type="text" id="pathway_name_${i}" placeholder="أدخل اسم المسار" required></div><div><label>اسم المنسق:</label><input type="text" id="pathway_coord_${i}" placeholder="أدخل اسم منسق المسار" required></div></div>`;
                 } else if (type === 'interventions') {
-                    div.innerHTML = `
-                        <div class="grid-2">
-                            <div>
-                                <label>اسم التدخل (${i}):</label>
-                                <input type="text" id="inter_name_${i}" placeholder="أدخل اسم التدخل" required>
-                            </div>
-                            <div>
-                                <label>اسم المنسق:</label>
-                                <input type="text" id="inter_coord_${i}" placeholder="أدخل اسم منسق التدخل" required>
-                            </div>
-                        </div>
-                    `;
+                    div.innerHTML = `<div class="grid-2"><div><label>اسم التدخل (${i}):</label><input type="text" id="inter_name_${i}" placeholder="أدخل اسم التدخل" required></div><div><label>اسم المنسق:</label><input type="text" id="inter_coord_${i}" placeholder="أدخل اسم منسق التدخل" required></div></div>`;
                 }
                 container.appendChild(div);
             }
         } else {
             container.style.display = 'none';
         }
-    }
+    };
 
-    function saveData(event) {
+    window.saveDataToSheet = async function(event) {
         event.preventDefault();
-        
         const sector = document.getElementById('sectorSelect').value;
         const center = document.getElementById('centerSelect').value;
         
@@ -339,27 +212,36 @@
         }
 
         const record = {
-            sector,
-            center,
-            systems,
-            pathways,
-            interventions,
+            sector, center, systems, pathways, interventions,
             date: new Date().toLocaleString('ar-SA')
         };
 
-        let submittedData = JSON.parse(localStorage.getItem('healthData')) || [];
-        submittedData.push(record);
-        localStorage.setItem('healthData', JSON.stringify(submittedData));
-        
-        document.getElementById('healthForm').reset();
-        document.getElementById('centerSelect').disabled = true;
-        document.getElementById('systemsContainer').style.display = 'none';
-        document.getElementById('pathwaysContainer').style.display = 'none';
-        document.getElementById('interventionsContainer').style.display = 'none';
-        
-        alert('تم حفظ البيانات بنجاح!');
-    }
-</script>
+        const submitBtn = document.querySelector('button[type="submit"]');
+        try {
+            submitBtn.textContent = "جاري الحفظ في القوقل شيت...";
+            submitBtn.disabled = true;
 
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+
+            alert('تم حفظ البيانات في Google Sheets بنجاح!');
+            document.getElementById('healthForm').reset();
+            document.getElementById('centerSelect').disabled = true;
+            document.getElementById('systemsContainer').style.display = 'none';
+            document.getElementById('pathwaysContainer').style.display = 'none';
+            document.getElementById('interventionsContainer').style.display = 'none';
+        } catch (e) {
+            console.error("خطأ:", e);
+            alert('حدث خطأ أثناء الإرسال.');
+        } finally {
+            submitBtn.textContent = 'حفظ وإرسال البيانات إلى قوقل شيت';
+            submitBtn.disabled = false;
+        }
+    };
+</script>
 </body>
 </html>
